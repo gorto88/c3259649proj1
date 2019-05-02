@@ -1,0 +1,122 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    char text[1000];                                                // Inputted text by user for encryption or decryprtion
+    char encrypted[1000];                                           // Encrypted text
+    char decrypted[1000];                                           // Decrypted text
+    char key[38];                                                   // Substitution key
+    char stringa[38]="ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890";       // String of all possible inputs
+    char letter;                                                    // Temp character
+    int i=0, j=0, flag=0, a, count;                                 // Declaring integers, flags, counters, etc
+    
+
+
+    // Receive text to encrypt or decrypt from user
+    printf("Please enter the text to encrypt or decrypt:\n");
+    scanf("%[^\n]s", text);
+
+    // Encrypt or decrypt?
+    printf("Would you like to encrypt (1) or decrypt (2) the text?\n");
+    scanf("%d", &a);
+
+    // Receive 37 character substition cipher key from user
+    printf("Please enter a 37 character substitution encryption key:\n");
+    scanf("%s", key);
+
+
+// First if statement for encryption
+
+    if(a==1)                                        // If the user inputs 1, encrytion function will be used
+    {
+        while(j<1000 && text[j]!='\0')              // While inputted characters lower than declared 1000 amount
+        {
+            letter=text[j];                         // Temporary variable
+            while(i<37 && flag==0)                  // Check cipher key under 37
+            {
+                if(letter>='a' && letter<='z')      // Convert lower to uppercase
+                {
+                    letter=letter-32;               // -32 to change to uppercase
+                }   
+                if(letter==stringa[i])              // Find letter from given string of chars
+                {
+                    flag=1;                         
+                }
+                else
+                {
+                    i++;                            // i counter if no match
+                }
+            }
+            if(flag==1)                             // Flag = 1 if match found
+            {
+                encrypted[j]=key[i];
+            }
+            else if(flag==0)                        // If no match was found, the encrypted messag will just be the character
+            {
+                encrypted[j]=letter;
+            }
+            else                                    
+            {
+                printf("Error - Try Again");        // Print if error occurs for whatever reason
+            }
+            
+            i=0;                                    // Set i back to zero to check jth char
+            flag=0;                                 // Set flag to zero to continue loop
+            j++;                                    // J counter
+        }
+            count=j;
+            j=0;
+            while(j<count && encrypted[j]!='\0')
+        {
+            printf("%c", encrypted[j]);             // Print encrpyted text for user
+            j++;
+        }
+    }
+    
+// Second if statement for decryption, comments are as above.
+
+    else if(a==2)   
+    {
+
+        while(j<1000 && text[j]!='\0')
+        {
+            letter=text[j];
+            while(i<37 && flag==0)
+            {
+                if(letter==key[i])
+                {
+                    flag=1;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            if(flag==1)
+            {
+                decrypted[j]=stringa[i];
+            }
+            else if(flag==0)
+            {
+                decrypted[j]=letter;
+            }
+            else
+            {
+                printf("Error - Please Try Again");
+            }
+            i=0;
+            flag=0;
+            j++;
+        }
+        count=j;
+        j=0;
+        while(j<count && decrypted[j]!='\0')
+        {
+            printf("%c", decrypted[j]);
+            j++;
+        }
+    }
+
+    return 0;
+}
